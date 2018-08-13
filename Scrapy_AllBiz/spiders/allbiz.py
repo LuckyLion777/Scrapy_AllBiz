@@ -92,7 +92,8 @@ class AlibabaCrawler(scrapy.Spider):
         country = response.xpath('//div[@class="ab-company-location__info"]/text()').extract()
         item['country'] = country[0] if country else None
 
-        if company_link and (item['company_link'] not in self.unique_data):
+        if item['company_link'] and (item['company_link'] not in self.unique_data):
+            self.unique_data.add(item['company_link'])
             yield scrapy.Request(
                 url=item['company_link'],
                 callback=self.parse_company_info,
